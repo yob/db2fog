@@ -5,7 +5,8 @@ Dependencies:
   gem install aws-s3
 
 Usage:
-  # In an initializer
+  git clone 
+  # In config/initializers/db2s3.rb
   DB2S3::Config.instance_eval do
     S3 = {
       :access_key_id     => 'yourkey',
@@ -15,12 +16,13 @@ Usage:
   end
   # DB credentials are read from your rails environment
 
+  # Add to your crontab or whatever
   rake db2s3:backup:full
   rake db2s3:backup:incremental # Unimplemented
   rake db2s3:backup:restore
 
 Caveats:
-  Currently only stores latest backup
+  Currently only stores the latest backup
 
 Kudos:
   http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
