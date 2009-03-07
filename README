@@ -10,3 +10,6 @@ Usage:
   rake db2s3:backup:restore
 
 Currently only stores latest backup
+
+Kudos:
+  http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
