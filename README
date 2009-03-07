@@ -5,7 +5,7 @@ Dependencies:
   gem install aws-s3
 
 Usage:
-  git clone 
+  ./script/plugin install git://github.com/xaviershay/db2s3.git
   # In config/initializers/db2s3.rb
   DB2S3::Config.instance_eval do
     S3 = {
