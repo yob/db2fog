@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{db2s3}
-  s.version = "0.2"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Xavier Shay"]
@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
     init.rb
     lib
     lib/db2s3.rb
+    lib/db2s3/tasks.rb
     rails
     rails/init.rb
     spec

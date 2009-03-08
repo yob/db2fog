@@ -23,14 +23,16 @@ class DB2S3
     transfer_dollars_per_byte_per_month = 0.10 / 1024.0 / 1024.0 / 1024.0
     full_dumps_per_month = 30
 
-    storage_cost = dump_file.size * storage_dollars_per_byte_per_month
-    transfer_cost = dump_file.size * full_dumps_per_month * transfer_dollars_per_byte_per_month
+    storage_cost = (dump_file.size * storage_dollars_per_byte_per_month * 100).ceil / 100.0
+    transfer_cost = (dump_file.size * full_dumps_per_month * transfer_dollars_per_byte_per_month * 100).ceil / 100.0
+    requests_cost = 0.02 # TODO: Actually calculate this, with incremental backups could be more
 
     {
       :db_size       => dump_file.size,
       :storage_cost  => storage_cost,
       :transfer_cost => transfer_cost,
-      :total_cost    => storage_cost + transfer_cost,
+      :total_cost    => storage_cost + transfer_cost + requests_cost,
+      :requests_cost => requests_cost,
       :full_backups_per_month => full_dumps_per_month
     }
   end

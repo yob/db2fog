@@ -15,15 +15,20 @@ namespace :db2s3 do
       s.sub(/\.?0*$/, units[e])
     end
 
+    def format_cost(cost)
+      "%.2f" % [cost]
+    end
+
     metrics = DB2S3.new.metrics
     puts <<-EOS
 Estimates only, does not take into account metadata overhead 
 
 DB Size:            #{format_size(metrics[:db_size])}
 Full backups/month: #{metrics[:full_backups_per_month]}
-Storage Cost $US:   #{metrics[:storage_cost]}
-Transfer Cost $US:  #{metrics[:transfer_cost]}
-Total Cost $US:     #{metrics[:total_cost]}
+Storage Cost $US:   #{format_cost(metrics[:storage_cost])}
+Transfer Cost $US:  #{format_cost(metrics[:transfer_cost])}
+Requests Cost $US:  #{format_cost(metrics[:requests_cost])}
+Total Cost $US:     #{format_cost(metrics[:total_cost])}
     EOS
   end
 end
