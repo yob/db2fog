@@ -8,14 +8,7 @@ class DB2S3
   end
 
   def full_backup
-    dump_file = Tempfile.new("dump")
-    
-    #cmd = "mysqldump --quick --single-transaction --create-options -u#{db_credentials[:user]} --flush-logs --master-data=2 --delete-master-logs"
-    cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
-    cmd += " | gzip > #{dump_file.path}"
-    run(cmd)
- 
-    store.store("dump-#{db_credentials[:database]}.sql.gz", open(dump_file.path))
+    store.store("dump-#{db_credentials[:database]}.sql.gz", open(dump_db.path))
   end
 
   def restore
@@ -23,20 +16,49 @@ class DB2S3
     run "gunzip -c #{file.path} | mysql #{mysql_options}"
   end
 
-  def mysql_credentials
+  def metrics
+    dump_file = dump_db
+
+    storage_dollars_per_byte_per_month  = 0.15 / 1024.0 / 1024.0 / 1024.0
+    transfer_dollars_per_byte_per_month = 0.10 / 1024.0 / 1024.0 / 1024.0
+    full_dumps_per_month = 30
+
+    storage_cost = dump_file.size * storage_dollars_per_byte_per_month
+    transfer_cost = dump_file.size * full_dumps_per_month * transfer_dollars_per_byte_per_month
+
+    {
+      :db_size       => dump_file.size,
+      :storage_cost  => storage_cost,
+      :transfer_cost => transfer_cost,
+      :total_cost    => storage_cost + transfer_cost,
+      :full_backups_per_month => full_dumps_per_month
+    }
+  end
+
+  private
+
+  def dump_db
+    dump_file = Tempfile.new("dump")
+    
+    #cmd = "mysqldump --quick --single-transaction --create-options -u#{db_credentials[:user]} --flush-logs --master-data=2 --delete-master-logs"
+    cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
+    cmd += " | gzip > #{dump_file.path}"
+    run(cmd)
+
+    dump_file
+  end
+
+  def mysql_options
     cmd = " -u#{db_credentials[:user]} "
     cmd += " -p'#{db_credentials[:password]}'" unless db_credentials[:password].nil?
     cmd += " #{db_credentials[:database]}"
   end
-
-  private
 
   def store
     @store ||= S3Store.new
   end
 
   def run(command)
-    puts command
     result = system(command)
     raise("error, process exited with status #{$?.exitstatus}") unless result
   end

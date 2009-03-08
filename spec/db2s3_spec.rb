@@ -21,4 +21,18 @@ describe 'db2s3' do
     db2s3.restore
     Person.find_by_name("Baxter").should_not be_nil
   end
+
+  it 'provides estimated metrics' do
+    db2s3 = DB2S3.new
+    # 1 GB DB
+    db2s3.stub!(:dump_db).and_return(stub("dump file", :size => 1024 * 1024 * 1024))
+    metrics = db2s3.metrics
+    metrics.should == {
+      :storage_cost => 0.15, # 15c/GB-Month, we're only storing one backup
+      :transfer_cost => 3.0, # 10c/GB-Month * 30 backups
+      :db_size       => 1024 * 1024 * 1024, # 1 GB
+      :total_cost    => 3.15,
+      :full_backups_per_month => 30 # Default 1 backup/day
+    }
+  end
 end

@@ -19,7 +19,10 @@ Usage:
   # Add to your crontab or whatever
   rake db2s3:backup:full
   rake db2s3:backup:incremental # Unimplemented
-  rake db2s3:backup:restore
+
+  # Handy tasks
+  rake db2s3:metrics         # Estimated costs
+  rake db2s3:backup:restore  # You should be testing this regularly
 
 Caveats:
   Currently only stores the latest backup
