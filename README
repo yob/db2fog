@@ -1,11 +1,15 @@
 DB2S3 - A rails plugin to backup Mysql to Amazon S3
 ---------------------------------------------------
-
-Dependencies:
-  gem install aws-s3
+You're looking at a monthly spend of four cents
+So pony up you cheap bastard, and store your backups on S3
 
 Usage:
-  ./script/plugin install git://github.com/xaviershay/db2s3.git
+  # In config/environment.rb
+  config.gem "xaviershay-db2s3", :lib => "db2s3", :source => "http://gems.github.com"
+
+  # In Rakefile
+  require 'db2s3/tasks'
+
   # In config/initializers/db2s3.rb
   DB2S3::Config.instance_eval do
     S3 = {
@@ -15,6 +19,8 @@ Usage:
     }
   end
   # DB credentials are read from your rails environment
+
+  rake gems:install
 
   # Add to your crontab or whatever
   rake db2s3:backup:full
