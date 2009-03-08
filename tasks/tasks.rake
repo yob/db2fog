@@ -4,6 +4,11 @@ namespace :db2s3 do
     task :full => :environment do
       DB2S3.new.full_backup
     end
+
+    desc "Restore your DB from S3"
+    task :restore => :environment do
+      DB2S3.new.restore
+    end
   end
 
   desc "Provide estimated costs for backing up your DB to S3"
