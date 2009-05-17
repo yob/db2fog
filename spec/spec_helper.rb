@@ -1,7 +1,11 @@
 require 'spec'
 require 'activerecord'
 require File.dirname(__FILE__) + '/../lib/db2s3'
-require File.dirname(__FILE__) + '/s3_config.rb'
+if File.exists?(File.dirname(__FILE__) + '/s3_config.rb')
+  require File.dirname(__FILE__) + '/s3_config.rb'
+else
+  puts "s3_config.rb does not exist - not running live tests"
+end
 
 DBConfig = {
   :adapter  => "mysql",
