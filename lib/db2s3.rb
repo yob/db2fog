@@ -1,4 +1,5 @@
 require 'aws/s3'
+require 'tempfile'
 
 class DB2S3
   class Config
@@ -8,11 +9,14 @@ class DB2S3
   end
 
   def full_backup
-    store.store("dump-#{db_credentials[:database]}.sql.gz", open(dump_db.path))
+    file_name = "dump-#{db_credentials[:database]}.sql.gz"
+    store.store(file_name, open(dump_db.path))
+    store.store(most_recent_dump_file_name, file_name)
   end
 
   def restore
-    file = store.fetch("dump-#{db_credentials[:database]}.sql.gz")
+    dump_file_name = store.fetch(most_recent_dump_file_name).read
+    file = store.fetch(dump_file_name)
     run "gunzip -c #{file.path} | mysql #{mysql_options}"
   end
 
@@ -58,6 +62,10 @@ class DB2S3
 
   def store
     @store ||= S3Store.new
+  end
+
+  def most_recent_dump_file_name
+    "most-recent-dump-#{db_credentials[:database]}.txt"
   end
 
   def run(command)

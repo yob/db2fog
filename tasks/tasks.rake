@@ -27,6 +27,7 @@ namespace :db2s3 do
     metrics = DB2S3.new.metrics
     puts <<-EOS
 Estimates only, does not take into account metadata overhead 
+Code has recently been added that keeps old backups around - this is not taken into account in these estimates
 
 DB Size:            #{format_size(metrics[:db_size])}
 Full backups/month: #{metrics[:full_backups_per_month]}

@@ -31,7 +31,7 @@ Usage:
   rake db2s3:backup:restore  # You should be testing this regularly
 
 Caveats:
-  Currently only stores the latest backup
+  Currently does not clean up old back ups
 
 Kudos:
   http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
