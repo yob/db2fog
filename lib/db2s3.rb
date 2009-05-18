@@ -9,7 +9,7 @@ class DB2S3
   end
 
   def full_backup
-    file_name = "dump-#{db_credentials[:database]}.sql.gz"
+    file_name = "dump-#{db_credentials[:database]}-#{Time.now.utc.strftime("%Y%m%d%H%M")}.sql.gz"
     store.store(file_name, open(dump_db.path))
     store.store(most_recent_dump_file_name, file_name)
   end
