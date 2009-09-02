@@ -1,2 +1,4 @@
+0.2.4 (2 Sep 2009)
+  - Fix credentials bug
 0.2.3
   - Keep old backups around
