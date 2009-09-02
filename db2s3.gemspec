@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
     spec/mysql_drop_schema.sql
     spec/mysql_schema.sql
     spec/s3_config.example.rb
-    spec/s3_config.rb
     spec/spec_helper.rb
     tasks
     tasks/tasks.rake
