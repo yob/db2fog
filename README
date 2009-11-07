@@ -5,7 +5,7 @@ So pony up you cheap bastard, and store your backups on S3
 
 Usage:
   # In config/environment.rb
-  config.gem "xaviershay-db2s3", :lib => "db2s3", :source => "http://gems.github.com"
+  config.gem "db2s3", :source => "http://gemcutter.org"
 
   # In Rakefile
   require 'db2s3/tasks'
