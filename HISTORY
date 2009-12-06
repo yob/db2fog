@@ -1,4 +1,7 @@
-0.2.6
+0.3.0 (6 Dec 2009)
+  - Added db2s3:backup:clean task to delete old backups
+  - Added dependency on activesupport for the clean task
+0.2.6 (6 Dec 2009)
   - Remove metrics task, since it was far too inaccurate
   - Add statistics task to show you the size of your tables
   - Only add username to mysql command line if provided in database.yml

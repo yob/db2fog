@@ -27,11 +27,9 @@ Usage:
   rake db2s3:backup:incremental # Unimplemented
 
   # Handy tasks
-  rake db2s3:metrics         # Estimated costs
+  rake db2s3:statistics      # Shows you the size of your DB
   rake db2s3:backup:restore  # You should be testing this regularly
-
-Caveats:
-  Currently does not clean up old back ups
+  rake db2s3:backup:clear    # Clean up old backups - cron this
 
 Kudos:
   http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
