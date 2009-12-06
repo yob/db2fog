@@ -64,7 +64,7 @@ class DB2S3
       table_name article_attachment
       FROM information_schema.tables
       WHERE table_schema = '#{db_credentials[:database]}'
-      ORDER BY 3 desc;
+      ORDER BY total_size_mb + total_index_size_mb desc;
     EOS
     rows = []
     results.each {|x| rows << x.to_a }
