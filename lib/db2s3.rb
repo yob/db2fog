@@ -45,7 +45,7 @@ class DB2S3
 
   def dump_db
     dump_file = Tempfile.new("dump")
-    
+
     #cmd = "mysqldump --quick --single-transaction --create-options -u#{db_credentials[:user]} --flush-logs --master-data=2 --delete-master-logs"
     cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
     cmd += " | gzip > #{dump_file.path}"
@@ -74,7 +74,7 @@ class DB2S3
     raise("error, process exited with status #{$?.exitstatus}") unless result
   end
 
-  def db_credentials 
+  def db_credentials
     ActiveRecord::Base.connection.instance_eval { @config } # Dodgy!
   end
 
@@ -98,7 +98,7 @@ class DB2S3
     def fetch(file_name)
       ensure_connected
       AWS::S3::S3Object.find(file_name, bucket)
-      
+
       file = Tempfile.new("dump")
       open(file.path, 'w') do |f|
         AWS::S3::S3Object.stream(file_name, bucket) do |chunk|
