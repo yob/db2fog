@@ -1,3 +1,4 @@
+require 'activesupport'
 require 'aws/s3'
 require 'tempfile'
 
@@ -18,6 +19,38 @@ class DB2S3
     dump_file_name = store.fetch(most_recent_dump_file_name).read
     file = store.fetch(dump_file_name)
     run "gunzip -c #{file.path} | mysql #{mysql_options}"
+  end
+
+  # TODO: This method really needs specs
+  def clean
+    to_keep = []
+    filelist = store.list
+    files = filelist.reject {|file| file.ends_with?(most_recent_dump_file_name) }.collect do |file|
+      {
+        :path => file,
+        :date => Time.parse(file.split('-').last.split('.').first)
+      }
+    end
+    # Keep all backups from the past day
+    files.select {|x| x[:date] >= 1.day.ago }.each do |backup_for_day|
+      to_keep << backup_for_day
+    end
+
+    # Keep one backup per day from the last week
+    files.select {|x| x[:date] >= 1.week.ago }.group_by {|x| x[:date].strftime("%Y%m%d") }.values.each do |backups_for_last_week|
+      to_keep << backups_for_last_week.sort_by{|x| x[:date].strftime("%Y%m%d") }.first
+    end
+
+    # Keep one backup per week since forever
+    files.group_by {|x| x[:date].strftime("%Y%W") }.values.each do |backups_for_week|
+      to_keep << backups_for_week.sort_by{|x| x[:date].strftime("%Y%m%d") }.first
+    end
+
+    to_destroy = filelist - to_keep.uniq.collect {|x| x[:path] }
+    to_destroy.delete_if {|x| x.ends_with?(most_recent_dump_file_name) }
+    to_destroy.each do |file|
+      store.delete(file.split('/').last)
+    end
   end
 
   private
@@ -86,6 +119,17 @@ class DB2S3
         end
       end
       file
+    end
+
+    def list
+      ensure_connected
+      AWS::S3::Bucket.find(bucket).objects.collect {|x| x.path }
+    end
+
+    def delete(file_name)
+      if object = AWS::S3::S3Object.find(file_name, bucket)
+        object.delete
+      end
     end
 
     private
