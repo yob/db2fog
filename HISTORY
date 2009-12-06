@@ -1,3 +1,5 @@
+0.3.1 (7 Dec 2009)
+  - Fixed hardcoded DB name in statistics task
 0.3.0 (6 Dec 2009)
   - Added db2s3:backup:clean task to delete old backups
   - Added dependency on activesupport for the clean task
