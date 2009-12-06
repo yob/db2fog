@@ -1,3 +1,9 @@
+0.2.6
+  - Remove metrics task, since it was far too inaccurate
+  - Add statistics task to show you the size of your tables
+  - Only add username to mysql command line if provided in database.yml
+0.2.5
+  - Use host provided in database.yml
 0.2.4 (2 Sep 2009)
   - Fix credentials bug
 0.2.3
