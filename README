@@ -29,7 +29,7 @@ Usage:
   # Handy tasks
   rake db2s3:statistics      # Shows you the size of your DB
   rake db2s3:backup:restore  # You should be testing this regularly
-  rake db2s3:backup:clear    # Clean up old backups - cron this
+  rake db2s3:backup:clean    # Clean up old backups - cron this
 
 Kudos:
   http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
