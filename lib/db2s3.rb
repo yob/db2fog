@@ -1,6 +1,6 @@
 begin
   require 'activesupport' # The old one
-rescue
+rescue LoadError
   require 'active_support' # The new one
 end
 require 'aws/s3'
