@@ -33,7 +33,7 @@ A rails plugin to backup Mysql to Amazon S3. You're looking at a monthly spend o
 
 == Development
 
-Specs are really week. This code is bit hackish but is being used by quite a few people. Migrating away from Jeweler to a hand coded gemspec and also using bundler would be nice.
+Specs are really week. This code is bit hackish but is being used by quite a few people.
 
 == Kudos
 
