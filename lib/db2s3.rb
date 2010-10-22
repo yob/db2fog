@@ -1,4 +1,8 @@
-require 'activesupport'
+begin
+  require 'activesupport' # The old one
+rescue
+  require 'active_support' # The new one
+end
 require 'aws/s3'
 require 'tempfile'
 
