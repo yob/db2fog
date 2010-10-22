@@ -31,5 +31,8 @@ Usage:
   rake db2s3:backup:restore  # You should be testing this regularly
   rake db2s3:backup:clean    # Clean up old backups - cron this
 
+Development:
+  Specs are really week. This code is bit hackish but is being used by quite a few people. Migrating away from Jeweler to a hand coded gemspec and also using bundler would be nice.
+
 Kudos:
   http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
