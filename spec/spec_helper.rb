@@ -16,7 +16,7 @@ end
 DB2Fog.config = {
   :provider   => 'Local',
   :local_root => File.dirname(__FILE__) + "/storage",
-  :directory  => 'db2s3-test'
+  :directory  => 'db2fog-test'
 }
 
 ActiveRecord::Base.configurations = { 'production' => DBConfig }
