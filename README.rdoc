@@ -1,40 +1,64 @@
-= DB2S3
+= DB2Fog
 
-A rails plugin to backup Mysql to Amazon S3. You're looking at a monthly spend of four cents. So pony up you cheap bastard, and store your backups on S3
+A rails plugin to backup Mysql to a cloud storage provider. You're looking at
+a monthly spend of four cents. So pony up you cheap bastard, and store your
+backups offsite.
+
+A grandfather style system to decide what backups to keep copies of:
+
+* all backups from the past 24 hours
+* one backup per day for the past week
+* one backup per week forever
+
+Depending on your tolerance for data loss you should be running a backup at
+least once a day, probably more.
+
+== Installation
+
+  gem install db2fog
 
 == Usage
 
-  # In config/environment.rb
-  config.gem "db2s3", :source => "http://gemcutter.org"
+  # In Gemfile
+  gem "db2fog"
 
-  # In Rakefile
-  require 'db2s3/tasks'
-
-  # In config/initializers/db2s3.rb
-  DB2S3.config = {
+  # In config/initializers/db2fog.rb
+  DB2Fog.config = {
       :aws_access_key_id     => 'yourkey',
       :aws_secret_access_key => 'yoursecretkey',
       :directory             => 'yourapp-db-backup',
       :provider              => 'AWS'
     }
-  end
+
   # DB credentials are read from your rails environment
 
-  rake gems:install
-
   # Add to your crontab or whatever
-  rake db2s3:backup:full
-  rake db2s3:backup:incremental # Unimplemented
+  rake db2fog:backup:full
 
   # Handy tasks
-  rake db2s3:statistics      # Shows you the size of your DB
-  rake db2s3:backup:restore  # You should be testing this regularly
-  rake db2s3:backup:clean    # Clean up old backups - cron this
+  rake db2fog:statistics      # Shows you the size of your DB
+  rake db2fog:backup:restore  # You should be testing this regularly
+  rake db2fog:backup:clean    # Clean up old backups - cron this
+
+== Compatibility
+
+This is pure ruby should run on most ruby VMs. I develop on MRI 1.9.2.
+
+This will only work work with rails 3. Supporting earlier versions is more
+complication than I can handle at the moment.
 
 == Development
 
-Specs are really week. This code is bit hackish but is being used by quite a few people.
+Specs are really weak. This code is bit hackish but is being used by quite a few people.
 
 == Kudos
+
+This is a fork of Xavier Shay's db2s3 gem. It worked perfectly, but only
+supported Amazon S3. By switching the dependency to using fog this now 
+supports multiple storage providers.
+
+Xavier's original gem is available at https://github.com/xaviershay/db2s3
+
+Xavier quotes the following example as inspiration:
 
 http://github.com/pauldowman/blog_code_examples/tree/master/mysql_s3_backup
