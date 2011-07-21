@@ -1,5 +1,6 @@
 require 'active_support'
 require 'active_support/core_ext/class/attribute_accessors'
+require 'active_support/core_ext/hash/except'
 require 'fog'
 require 'tempfile'
 
@@ -137,7 +138,7 @@ class DB2Fog
 
     def fog_options
       if DB2Fog.config.respond_to?(:[])
-        DB2Fog.config.slice(:aws_access_key_id, :aws_secret_access_key, :provider)
+        DB2Fog.config.except(:directory)
       else
         raise "DB2Fog not configured"
       end
