@@ -11,11 +11,11 @@ A rails plugin to backup Mysql to Amazon S3. You're looking at a monthly spend o
   require 'db2s3/tasks'
 
   # In config/initializers/db2s3.rb
-  DB2S3::Config.instance_eval do
-    S3 = {
-      :access_key_id     => 'yourkey',
-      :secret_access_key => 'yoursecretkey',
-      :bucket            => 'yourapp-db-backup'
+  DB2S3.config = {
+      :aws_access_key_id     => 'yourkey',
+      :aws_secret_access_key => 'yoursecretkey',
+      :directory             => 'yourapp-db-backup',
+      :provider              => 'AWS'
     }
   end
   # DB credentials are read from your rails environment

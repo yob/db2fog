@@ -1,10 +1,10 @@
-require 'active_support' # The new one
+require 'active_support'
+require 'active_support/core_ext/class/attribute_accessors'
 require 'fog'
 require 'tempfile'
 
 class DB2S3
-  class Config
-  end
+  cattr_accessor :config
 
   def initialize
   end
@@ -92,7 +92,7 @@ class DB2S3
   end
 
   def store
-    @store ||= S3Store.new
+    @store ||= FogStore.new
   end
 
   def most_recent_dump_file_name
@@ -108,7 +108,7 @@ class DB2S3
     ActiveRecord::Base.connection.instance_eval { @config } # Dodgy!
   end
 
-  class S3Store
+  class FogStore
 
     def store(remote_filename, io)
       unless directory.files.head(remote_filename)
@@ -136,11 +136,19 @@ class DB2S3
     private
 
     def fog_options
-      DB2S3::Config::S3.slice(:aws_access_key_id, :aws_secret_access_key, :provider)
+      if DB2S3.config.respond_to?(:[])
+        DB2S3.config.slice(:aws_access_key_id, :aws_secret_access_key, :provider)
+      else
+        raise "DB2S3 not configured"
+      end
     end
 
     def directory_name
-      DB2S3::Config::S3[:directory]
+      if DB2S3.config.respond_to?(:[])
+      DB2S3.config[:directory]
+      else
+        raise "DB2S3 not configured"
+      end
     end
 
     def directory
