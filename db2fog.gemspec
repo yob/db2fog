@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.description       = "db2fig provides rake tasks for backing up and restoring your DB to cloud storage providers"
   s.author            = "James Healy"
   s.email             = ["james@yob.id.au"]
-  s.homepage          = "http://github.com/yob/db2s3"
+  s.homepage          = "http://github.com/yob/db2fog"
   s.has_rdoc          = true
   s.rdoc_options      << "--title" << "DB2Fog" << "--line-numbers"
   s.files             = Dir.glob("lib/**/*") + ["README.rdoc", "HISTORY"]
