@@ -1,6 +1,7 @@
 require 'rails'
+require 'db2fog'
 
-module DB2Fog
+class DB2Fog
   class Railtie < Rails::Railtie
 
     rake_tasks do
