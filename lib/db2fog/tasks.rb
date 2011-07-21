@@ -1,6 +1,6 @@
 # coding: utf-8
 
-namespace :db2s3 do
+namespace :db2fog do
   namespace :backup do
     desc "Save a full back to S3"
     task :full => :environment do
