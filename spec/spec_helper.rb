@@ -6,10 +6,10 @@ require 'rspec'
 require 'active_record'
 require 'db2fog'
 
-if File.exists?(File.dirname(__FILE__) + '/s3_config.rb')
-  require File.dirname(__FILE__) + '/s3_config.rb'
+if File.exists?(File.dirname(__FILE__) + '/db_config.rb')
+  require File.dirname(__FILE__) + '/db_config.rb'
 else
-  puts "s3_config.rb does not exist - exiting"
+  puts "db_config.rb does not exist - exiting"
   exit 1
 end
 
