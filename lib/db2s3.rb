@@ -1,10 +1,7 @@
-begin
-  require 'activesupport' # The old one
-rescue LoadError
-  require 'active_support' # The new one
-end
+require 'active_support' # The new one
 require 'aws/s3'
 require 'tempfile'
+require 'db2s3/tasks'
 
 class DB2S3
   class Config
