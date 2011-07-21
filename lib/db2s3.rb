@@ -1,5 +1,5 @@
 require 'active_support' # The new one
-require 'aws/s3'
+require 'fog'
 require 'tempfile'
 
 class DB2S3
@@ -76,7 +76,6 @@ class DB2S3
   def dump_db
     dump_file = Tempfile.new("dump")
 
-    #cmd = "mysqldump --quick --single-transaction --create-options -u#{db_credentials[:user]} --flush-logs --master-data=2 --delete-master-logs"
     cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
     cmd += " | gzip > #{dump_file.path}"
     run(cmd)
@@ -110,50 +109,46 @@ class DB2S3
   end
 
   class S3Store
-    def initialize
-      @connected = false
+
+    def store(remote_filename, io)
+      unless directory.files.head(remote_filename)
+        directory.files.create(:key => remote_filename, :body => io, :public => false)
+      end
     end
 
-    def ensure_connected
-      return if @connected
-      AWS::S3::Base.establish_connection!(DB2S3::Config::S3.slice(:access_key_id, :secret_access_key).merge(:use_ssl => true))
-      AWS::S3::Bucket.create(bucket)
-      @connected = true
-    end
-
-    def store(file_name, file)
-      ensure_connected
-      AWS::S3::S3Object.store(file_name, file, bucket)
-    end
-
-    def fetch(file_name)
-      ensure_connected
-      AWS::S3::S3Object.find(file_name, bucket)
+    def fetch(remote_filename)
+      remote_file = directory.files.get(remote_filename)
 
       file = Tempfile.new("dump")
-      open(file.path, 'w') do |f|
-        AWS::S3::S3Object.stream(file_name, bucket) do |chunk|
-          f.write chunk
-        end
-      end
+      open(file.path, 'w') { |f| f.write(remote_file.body) }
       file
     end
 
     def list
-      ensure_connected
-      AWS::S3::Bucket.find(bucket).objects.collect {|x| x.path }
+      directory.files.map { |f| f.key }
     end
 
-    def delete(file_name)
-      if object = AWS::S3::S3Object.find(file_name, bucket)
-        object.delete
-      end
+    def delete(remote_filename)
+      remote_file = remote_file.head(remote_filename)
+      remote_file.destroy if remote_file
     end
 
     private
 
-    def bucket
-      DB2S3::Config::S3[:bucket]
+    def fog_options
+      DB2S3::Config::S3.slice(:aws_access_key_id, :aws_secret_access_key, :provider)
+    end
+
+    def directory_name
+      DB2S3::Config::S3[:directory]
+    end
+
+    def directory
+      @directory ||= storage.directories.get(directory_name)
+    end
+
+    def storage
+      @storage = Fog::Storage.new(fog_options)
     end
   end
 
