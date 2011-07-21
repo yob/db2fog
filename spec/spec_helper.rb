@@ -4,7 +4,7 @@ Bundler.setup
 
 require 'rspec'
 require 'active_record'
-require 'db2s3'
+require 'db2fog'
 
 if File.exists?(File.dirname(__FILE__) + '/s3_config.rb')
   require File.dirname(__FILE__) + '/s3_config.rb'

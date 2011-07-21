@@ -3,7 +3,7 @@ require 'active_support/core_ext/class/attribute_accessors'
 require 'fog'
 require 'tempfile'
 
-class DB2S3
+class DB2Fog
   cattr_accessor :config
 
   def initialize
@@ -136,18 +136,18 @@ class DB2S3
     private
 
     def fog_options
-      if DB2S3.config.respond_to?(:[])
-        DB2S3.config.slice(:aws_access_key_id, :aws_secret_access_key, :provider)
+      if DB2Fog.config.respond_to?(:[])
+        DB2Fog.config.slice(:aws_access_key_id, :aws_secret_access_key, :provider)
       else
-        raise "DB2S3 not configured"
+        raise "DB2Fog not configured"
       end
     end
 
     def directory_name
-      if DB2S3.config.respond_to?(:[])
-      DB2S3.config[:directory]
+      if DB2Fog.config.respond_to?(:[])
+      DB2Fog.config[:directory]
       else
-        raise "DB2S3 not configured"
+        raise "DB2Fog not configured"
       end
     end
 

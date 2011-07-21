@@ -1,6 +1,6 @@
 require 'rails'
 
-module DB2S3
+module DB2Fog
   class Railtie < Rails::Railtie
 
     rake_tasks do
