@@ -65,7 +65,7 @@ providers they should work with just a config change to Db2Fog.
 
 == Compatibility
 
-This is pure ruby should run on most ruby VMs. I develop on MRI 1.9.2.
+This is pure so ruby should run on most ruby VMs. I develop on MRI 1.9.2.
 
 This will only work work with rails 3. Supporting earlier versions is more
 complication than I can handle at the moment.
