@@ -5,6 +5,13 @@ end
 
 describe DB2Fog do
 
+  before(:all) do
+    storage_dir = File.dirname(__FILE__) + "/storage"
+    Dir.mkdir(storage_dir) unless File.directory?(storage_dir)
+    bucket = File.join(storage_dir, "db2s3-test")
+    Dir.mkdir(bucket) unless File.directory?(bucket)
+  end
+
   def load_schema
     `cat '#{File.dirname(__FILE__) + '/mysql_schema.sql'}' | mysql -u #{DBConfig[:user]} -p#{DBConfig[:password]} #{DBConfig[:database]}`
   end
