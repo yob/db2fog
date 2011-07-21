@@ -63,8 +63,6 @@ providers they should work with just a config change to Db2Fog.
   rake db2fog:backup:restore  # You should be testing this regularly
   rake db2fog:backup:clean    # Clean up old backups - cron this
 
-===
-
 == Compatibility
 
 This is pure ruby should run on most ruby VMs. I develop on MRI 1.9.2.
