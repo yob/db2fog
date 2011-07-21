@@ -1,7 +1,6 @@
 require 'active_support' # The new one
 require 'aws/s3'
 require 'tempfile'
-require 'db2s3/tasks'
 
 class DB2S3
   class Config
