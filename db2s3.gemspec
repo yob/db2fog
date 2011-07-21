@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">=1.3.2"
   s.required_ruby_version = ">=1.8.7"
 
+  s.add_dependency("rails", "~> 3.0")
   s.add_dependency("aws-s3", "0.6.2")
 
   s.add_development_dependency("rake")
