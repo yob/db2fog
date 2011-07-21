@@ -15,22 +15,45 @@ least once a day, probably more.
 
 == Installation
 
-  gem install db2fog
+Add the following to your project Gemfile
 
-== Usage
-
-  # In Gemfile
   gem "db2fog"
 
-  # In config/initializers/db2fog.rb
-  DB2Fog.config = {
-      :aws_access_key_id     => 'yourkey',
-      :aws_secret_access_key => 'yoursecretkey',
-      :directory             => 'yourapp-db-backup',
-      :provider              => 'AWS'
-    }
+== Configuration
 
-  # DB credentials are read from your rails environment
+Add the following to config/initializers/db2fog.rb
+
+In general, you can use any configuration options supported by
+Fog::Storage.new, plus the :directory option. If fog adds support for extra
+providers they should work with just a config change to Db2Fog.
+
+=== Amazon S3
+
+  DB2Fog.config = {
+    :aws_access_key_id     => 'yourkey',
+    :aws_secret_access_key => 'yoursecretkey',
+    :directory             => 'bucket-name',
+    :provider              => 'AWS'
+  }
+
+=== Rackspace Cloudfiles
+
+  DB2Fog.config = {
+    :rackspace_username => 'username',
+    :rackspace_api_key  => 'api key',
+    :directory          => 'bucket-name',
+    :provider           => 'Rackspace'
+  }
+
+=== Local Storage
+
+  DB2Fog.config = {
+    :directory  => 'bucket-name',
+    :local_root => Rails.root.to_s + '/db/backups',
+    :provider   => 'Local'
+  }
+
+== Usage
 
   # Add to your crontab or whatever
   rake db2fog:backup:full
@@ -39,6 +62,8 @@ least once a day, probably more.
   rake db2fog:statistics      # Shows you the size of your DB
   rake db2fog:backup:restore  # You should be testing this regularly
   rake db2fog:backup:clean    # Clean up old backups - cron this
+
+===
 
 == Compatibility
 
@@ -54,7 +79,7 @@ Specs are really weak. This code is bit hackish but is being used by quite a few
 == Kudos
 
 This is a fork of Xavier Shay's db2s3 gem. It worked perfectly, but only
-supported Amazon S3. By switching the dependency to using fog this now 
+supported Amazon S3. By switching the dependency to using fog this now
 supports multiple storage providers.
 
 Xavier's original gem is available at https://github.com/xaviershay/db2s3
