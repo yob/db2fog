@@ -3,6 +3,8 @@ require "bundler"
 Bundler.setup
 
 require 'rspec'
+require 'fileutils'
+require 'timecop'
 require 'active_record'
 require 'db2fog'
 
