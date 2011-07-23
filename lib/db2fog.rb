@@ -128,7 +128,7 @@ class DB2Fog
     end
 
     def delete(remote_filename)
-      remote_file = remote_file.head(remote_filename)
+      remote_file = directory.files.head(remote_filename)
       remote_file.destroy if remote_file
     end
 
