@@ -4,7 +4,7 @@ A rails plugin to backup Mysql to a cloud storage provider. You're looking at
 a monthly spend of four cents. So pony up you cheap bastard, and store your
 backups offsite.
 
-A grandfather style system to decide what backups to keep copies of:
+A grandfather style system is decides what backups to keep copies of:
 
 * all backups from the past 24 hours
 * one backup per day for the past week
@@ -68,7 +68,7 @@ providers they should work with just a config change to Db2Fog.
 This is pure so ruby should run on most ruby VMs. I develop on MRI 1.9.2.
 
 This will only work work with rails 3. Supporting earlier versions is more
-complication than I can handle at the moment.
+complication than I feel like handling at the moment.
 
 == Development
 
@@ -77,8 +77,8 @@ Specs are really weak. This code is bit hackish but is being used by quite a few
 == Kudos
 
 This is a fork of Xavier Shay's db2s3 gem. It worked perfectly, but only
-supported Amazon S3. By switching the dependency to using fog this now
-supports multiple storage providers.
+supported Amazon S3 within US-east. By switching the dependency to using fog
+this now supports all S3 regions and multiple storage providers
 
 Xavier's original gem is available at https://github.com/xaviershay/db2s3
 
