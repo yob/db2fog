@@ -110,9 +110,7 @@ class DB2Fog
   class FogStore
 
     def store(remote_filename, io)
-      unless directory.files.head(remote_filename)
-        directory.files.create(:key => remote_filename, :body => io, :public => false)
-      end
+      directory.files.create(:key => remote_filename, :body => io, :public => false)
     end
 
     def fetch(remote_filename)

@@ -52,6 +52,18 @@ describe DB2Fog do
 
       backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz","dump-db2s3_unittest-201107240410.sql.gz"]
     end
+
+    it 'can record the filename of the most recent backup' do
+      db2fog = DB2Fog.new
+      load_schema
+      Person.create!(:name => "Baxter")
+
+      Timecop.travel(Time.local(2011, 7, 23, 12, 10, 0)) { db2fog.full_backup }
+      Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.full_backup }
+
+      latest = File.join(storage_dir, "most-recent-dump-db2s3_unittest.txt")
+      File.read(latest).should == "dump-db2s3_unittest-201107230410.sql.gz"
+    end
   end
 
   describe "restore()" do
