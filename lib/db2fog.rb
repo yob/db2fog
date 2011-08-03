@@ -119,7 +119,7 @@ class DB2Fog
       remote_file = directory.files.get(remote_filename)
 
       file = Tempfile.new("dump")
-      open(file.path, 'w') { |f| f.write(remote_file.body) }
+      open(file.path, 'wb') { |f| f.write(remote_file.body) }
       file
     end
 
