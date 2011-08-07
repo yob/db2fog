@@ -63,11 +63,6 @@ class DB2Fog
     "most-recent-dump-#{db_credentials[:database]}.txt"
   end
 
-  def run(command)
-    result = system(command)
-    raise("error, process exited with status #{$?.exitstatus}") unless result
-  end
-
   def db_credentials
     ActiveRecord::Base.connection.instance_eval { @config } # Dodgy!
   end
