@@ -17,12 +17,4 @@ namespace :db2fog do
       DB2Fog.new.clean
     end
   end
-
-  desc "Show table sizes for your database"
-  task :statistics => :environment do
-    rows = DB2Fog.new.statistics
-    rows.sort_by {|x| -x[3].to_i }
-    header = [["Type", "Data MB", "Index", "Rows", "Name"], []]
-    puts (header + rows).collect {|x| x.join("\t") }
-  end
 end

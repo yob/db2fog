@@ -59,7 +59,6 @@ providers they should work with just a config change to Db2Fog.
   rake db2fog:backup:full
 
   # Handy tasks
-  rake db2fog:statistics      # Shows you the size of your DB
   rake db2fog:backup:restore  # You should be testing this regularly
   rake db2fog:backup:clean    # Clean up old backups - cron this
 

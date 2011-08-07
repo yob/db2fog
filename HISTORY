@@ -1,5 +1,6 @@
 v0.5.0 (6th August 2011)
   - initial postgresql support
+  - removed the statistics rake task
 v0.4.2 (24th July 2011)
   - fixed recording of most recent backup
   - remove runtime dependency on mysql2

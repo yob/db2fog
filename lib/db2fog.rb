@@ -53,24 +53,6 @@ class DB2Fog
     end
   end
 
-  def statistics
-      # From http://mysqlpreacher.com/wordpress/tag/table-size/
-    results = ActiveRecord::Base.connection.execute(<<-EOS)
-    SELECT
-      engine,
-      ROUND(data_length/1024/1024,2) total_size_mb,
-      ROUND(index_length/1024/1024,2) total_index_size_mb,
-      table_rows,
-      table_name article_attachment
-      FROM information_schema.tables
-      WHERE table_schema = '#{db_credentials[:database]}'
-      ORDER BY total_size_mb + total_index_size_mb desc;
-    EOS
-    rows = []
-    results.each {|x| rows << x.to_a }
-    rows
-  end
-
   private
 
   def store
