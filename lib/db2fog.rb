@@ -12,14 +12,14 @@ class DB2Fog
 
   def full_backup
     file_name = "dump-#{db_credentials[:database]}-#{Time.now.utc.strftime("%Y%m%d%H%M")}.sql.gz"
-    store.store(file_name, open(dump_db.path))
+    store.store(file_name, open(database.dump))
     store.store(most_recent_dump_file_name, file_name)
   end
 
   def restore
     dump_file_name = store.fetch(most_recent_dump_file_name).read
     file = store.fetch(dump_file_name)
-    run "gunzip -c #{file.path} | mysql #{mysql_options}"
+    database.restore(file.path)
   end
 
   def clean
@@ -73,24 +73,6 @@ class DB2Fog
 
   private
 
-  def dump_db
-    dump_file = Tempfile.new("dump")
-
-    cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
-    cmd += " | gzip -9 > #{dump_file.path}"
-    run(cmd)
-
-    dump_file
-  end
-
-  def mysql_options
-    cmd = ''
-    cmd += " -u #{db_credentials[:username]} " unless db_credentials[:username].nil?
-    cmd += " -p'#{db_credentials[:password]}'" unless db_credentials[:password].nil?
-    cmd += " -h '#{db_credentials[:host]}'"    unless db_credentials[:host].nil?
-    cmd += " #{db_credentials[:database]}"
-  end
-
   def store
     @store ||= FogStore.new
   end
@@ -106,6 +88,97 @@ class DB2Fog
 
   def db_credentials
     ActiveRecord::Base.connection.instance_eval { @config } # Dodgy!
+  end
+
+  def database
+    @database ||= case db_credentials[:adapter]
+                  when /mysql/    then MysqlAdaptor.new(db_credentials)
+                  when /postgres/ then PsqlAdaptor.new(db_credentials)
+                  else
+                    raise "database adaptor '#{db_credentials[:adapter]}' not supported"
+                  end
+  end
+
+  class MysqlAdaptor
+
+    def initialize(credentials)
+      @credentials = credentials
+    end
+
+    def dump
+      dump_file = Tempfile.new("dump")
+
+      cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
+      cmd += " | gzip -9 > #{dump_file.path}"
+      run(cmd)
+
+      dump_file.path
+    end
+
+    def restore(path)
+      run "gunzip -c #{path} | mysql #{mysql_options}"
+    end
+
+    private
+
+    def mysql_options
+      cmd = ''
+      cmd += " -u #{@credentials[:username]} " unless @credentials[:username].nil?
+      cmd += " -p'#{@credentials[:password]}'" unless @credentials[:password].nil?
+      cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
+      cmd += " #{@credentials[:database]}"
+    end
+
+    def run(command)
+      result = system(command)
+      raise("error, process exited with status #{$?.exitstatus}") unless result
+    end
+
+  end
+
+  class PsqlAdaptor
+
+    def initialize(credentials)
+      @credentials = credentials
+    end
+
+    def dump
+      dump_file = Tempfile.new("dump")
+
+      cmd = "pg_dump --clean --format=p #{pg_dump_options}"
+      cmd += " | gzip -9 > #{dump_file.path}"
+      run(cmd)
+
+      dump_file.path
+    end
+
+    def restore
+      run "gunzip -c #{path} | psql #{psql_options}"
+    end
+
+    private
+
+    def pg_dump_options
+      cmd = ''
+      cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
+      cmd += " -w"
+      cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
+      cmd += " #{@credentials[:database]}"
+    end
+
+    def psql_options
+      cmd = ''
+      cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
+      cmd += " -w"
+      cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
+      cmd += " -d #{@credentials[:database]}"
+    end
+
+    def run(command)
+      result = system(command)
+      raise("error, process exited with status #{$?.exitstatus}") unless result
+    end
+
   end
 
   class FogStore
