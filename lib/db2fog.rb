@@ -78,7 +78,7 @@ class DB2Fog
     dump_file = Tempfile.new("dump")
 
     cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
-    cmd += " | gzip > #{dump_file.path}"
+    cmd += " | gzip -9 > #{dump_file.path}"
     run(cmd)
 
     dump_file
