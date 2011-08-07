@@ -22,7 +22,6 @@ class DB2Fog
     run "gunzip -c #{file.path} | mysql #{mysql_options}"
   end
 
-  # TODO: This method really needs specs
   def clean
     to_keep = []
     filelist = store.list
