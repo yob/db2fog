@@ -103,6 +103,7 @@ class DB2Fog
       cmd += " -u #{@credentials[:username]} " unless @credentials[:username].nil?
       cmd += " -p'#{@credentials[:password]}'" unless @credentials[:password].nil?
       cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
+      cmd += " --default-character-set=#{@credentials[:encoding]}" unless @credentials[:encoding].nil?
       cmd += " #{@credentials[:database]}"
     end
 
