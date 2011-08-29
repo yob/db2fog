@@ -1,3 +1,5 @@
+v0.5.1 (29th August 2011)
+  - relax fog dependency to allow higher versions
 v0.5.0 (6th August 2011)
   - initial postgresql support
   - removed the statistics rake task
