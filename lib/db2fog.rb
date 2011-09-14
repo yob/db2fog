@@ -130,7 +130,7 @@ class DB2Fog
       dump_file.path
     end
 
-    def restore
+    def restore(path)
       run "gunzip -c #{path} | psql #{psql_options}"
     end
 
