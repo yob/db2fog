@@ -1,3 +1,5 @@
+v0.5.2 (15th September 2011)
+  - fix restoring of postgresql databases (thanks Dan Neighman)
 v0.5.1 (29th August 2011)
   - relax fog dependency to allow higher versions
 v0.5.0 (6th August 2011)
