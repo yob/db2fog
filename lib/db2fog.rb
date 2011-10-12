@@ -25,12 +25,14 @@ class DB2Fog
   def clean
     to_keep = []
     filelist = store.list
-    files = filelist.reject {|file| file.ends_with?(most_recent_dump_file_name) }.collect do |file|
+    files = filelist.select {|file|
+      file.include?(db_credentials[:database]) && file.match(/\d{12}.sql.gz\Z/)
+    }.map { |file|
       {
         :path => file,
         :date => Time.parse(file.split('-').last.split('.').first)
       }
-    end
+    }
     # Keep all backups from the past day
     files.select {|x| x[:date] >= 1.day.ago }.each do |backup_for_day|
       to_keep << backup_for_day
