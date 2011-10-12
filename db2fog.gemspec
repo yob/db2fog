@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "db2fog"
-  s.version           = "0.5.2"
+  s.version           = "0.5.3"
   s.summary           = "db2fog provides rake tasks for backing up and restoring your DB to cloud storage providers"
   s.description       = "db2fog provides rake tasks for backing up and restoring your DB to cloud storage providers"
   s.author            = "James Healy"

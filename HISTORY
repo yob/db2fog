@@ -1,3 +1,5 @@
+v0.5.3 (12th October 2011)
+  - improve robustness of clean task
 v0.5.2 (15th September 2011)
   - fix restoring of postgresql databases (thanks Dan Neighman)
 v0.5.1 (29th August 2011)
