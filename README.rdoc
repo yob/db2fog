@@ -1,10 +1,10 @@
 = DB2Fog
 
-A rails plugin to backup Mysql to a cloud storage provider. You're looking at
+A rails plugin to backup Mysql or PostgreSQL to a cloud storage provider. You're looking at
 a monthly spend of four cents. So pony up you cheap bastard, and store your
 backups offsite.
 
-A grandfather style system is decides what backups to keep copies of:
+A grandfather style system is used to decide what backups to keep copies of:
 
 * all backups from the past 24 hours
 * one backup per day for the past week
