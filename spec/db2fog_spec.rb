@@ -21,7 +21,7 @@ describe DB2Fog do
   end
 
   def backup_files
-    Dir.entries(storage_dir).select { |f| f[-3,3] == ".gz"}.sort
+    Dir.entries(storage_dir).select { |f| f[0,1] != "."}.sort
   end
 
   describe "full_backup()" do
@@ -34,7 +34,7 @@ describe DB2Fog do
         db2fog.full_backup
       end
 
-      backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz"]
+      backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz", "most-recent-dump-db2s3_unittest.txt"]
     end
 
     it 'can save two backups' do
@@ -50,7 +50,7 @@ describe DB2Fog do
         db2fog.full_backup
       end
 
-      backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz","dump-db2s3_unittest-201107240410.sql.gz"]
+      backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz","dump-db2s3_unittest-201107240410.sql.gz","most-recent-dump-db2s3_unittest.txt"]
     end
 
     it 'can record the filename of the most recent backup' do
@@ -104,8 +104,21 @@ describe DB2Fog do
         "dump-db2s3_unittest-201106230410.sql.gz",
         "dump-db2s3_unittest-201107200410.sql.gz",
         "dump-db2s3_unittest-201107230210.sql.gz",
-        "dump-db2s3_unittest-201107230410.sql.gz"
+        "dump-db2s3_unittest-201107230410.sql.gz",
+        "most-recent-dump-db2s3_unittest.txt"
       ]
+    end
+
+    it 'only cleans files created by db2fog' do
+      File.open("#{storage_dir}/foo.txt","wb") { |f| f.write "hello"}
+      db2fog = DB2Fog.new
+      load_schema
+      Person.create!(:name => "Baxter")
+
+      # clean up
+      Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.clean }
+
+      backup_files.should == [ "foo.txt" ]
     end
   end
 end

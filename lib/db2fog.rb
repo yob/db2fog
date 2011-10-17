@@ -24,10 +24,11 @@ class DB2Fog
 
   def clean
     to_keep = []
-    filelist = store.list
-    files = filelist.select {|file|
+    # only consider files that belong to db2fog. Other files are ignored
+    filelist = store.list.select {|file|
       file.include?(db_credentials[:database]) && file.match(/\d{12}.sql.gz\Z/)
-    }.map { |file|
+    }
+    files = filelist.map { |file|
       {
         :path => file,
         :date => Time.parse(file.split('-').last.split('.').first)
@@ -49,7 +50,6 @@ class DB2Fog
     end
 
     to_destroy = filelist - to_keep.uniq.collect {|x| x[:path] }
-    to_destroy.delete_if {|x| x.ends_with?(most_recent_dump_file_name) }
     to_destroy.each do |file|
       store.delete(file.split('/').last)
     end
