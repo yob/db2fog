@@ -52,7 +52,23 @@ providers they should work with just a config change to Db2Fog.
     :local_root => Rails.root.to_s + '/db/backups',
     :provider   => 'Local'
   }
+ 
+== Passing options to the database driver
 
+DB2Fog.config = {
+  :directory  => 'bucket-name',
+  :local_root => Rails.root.to_s + '/db/backups',
+  :provider   => 'Local',
+  :database_options => {
+    :pg_version => 8
+  }
+}
+
+Supported database options:
+
+pg_version    8 or 9
+  The major version of PostgreSQL installed on the server. Defaults to 9.
+  
 == Usage
 
   # Add to your crontab or whatever
