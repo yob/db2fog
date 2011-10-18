@@ -151,7 +151,9 @@ class DB2Fog
     def psql_options
       cmd = ''
       cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
-      cmd += " -w"
+      unless database_options && (database_options[:pg_version] == 8)
+        cmd += " -w"
+      end
       cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
       cmd += " -d #{@credentials[:database]}"
     end
