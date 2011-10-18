@@ -1,3 +1,4 @@
+  - Support for postgresql 8
 v0.5.3 (12th October 2011)
   - improve robustness of clean task
 v0.5.2 (15th September 2011)
