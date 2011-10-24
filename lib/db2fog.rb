@@ -141,21 +141,22 @@ class DB2Fog
     def pg_dump_options
       cmd = ''
       cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
-      unless database_options && (database_options[:pg_version] == 8)
-        cmd += " -w"
-      end
       cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
+      cmd += " -w"                             if     pg_version >= 9
       cmd += " #{@credentials[:database]}"
     end
 
     def psql_options
       cmd = ''
       cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
-      unless database_options && (database_options[:pg_version] == 8)
-        cmd += " -w"
-      end
       cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
+      cmd += " -w"                             if     pg_version >= 9
       cmd += " -d #{@credentials[:database]}"
+    end
+
+    def pg_version
+      opts = database_options || {}
+      opts[:pg_version] || 9
     end
 
     def run(command)
