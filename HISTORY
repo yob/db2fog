@@ -1,3 +1,5 @@
+v0.6.0 (24th October 2011)
+  - Support for postgresql 8
 v0.5.4 (17th October 2011)
   - only clean files that were created by db2fog
 v0.5.3 (12th October 2011)

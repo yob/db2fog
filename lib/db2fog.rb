@@ -141,7 +141,9 @@ class DB2Fog
     def pg_dump_options
       cmd = ''
       cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
-      cmd += " -w"
+      unless database_options && (database_options[:pg_version] == 8)
+        cmd += " -w"
+      end
       cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
       cmd += " #{@credentials[:database]}"
     end
@@ -149,7 +151,9 @@ class DB2Fog
     def psql_options
       cmd = ''
       cmd += " -U #{@credentials[:username]} " unless @credentials[:username].nil?
-      cmd += " -w"
+      unless database_options && (database_options[:pg_version] == 8)
+        cmd += " -w"
+      end
       cmd += " -h '#{@credentials[:host]}'"    unless @credentials[:host].nil?
       cmd += " -d #{@credentials[:database]}"
     end
@@ -157,6 +161,14 @@ class DB2Fog
     def run(command)
       result = system(command)
       raise("error, process exited with status #{$?.exitstatus}") unless result
+    end
+
+    def database_options
+      if DB2Fog.config.respond_to?(:[])
+        DB2Fog.config[:database_options]
+      else
+        raise "DB2Fog not configured"
+      end
     end
 
   end
@@ -188,7 +200,7 @@ class DB2Fog
 
     def fog_options
       if DB2Fog.config.respond_to?(:[])
-        DB2Fog.config.except(:directory)
+        DB2Fog.config.except(:directory, :database_options)
       else
         raise "DB2Fog not configured"
       end
@@ -196,7 +208,7 @@ class DB2Fog
 
     def directory_name
       if DB2Fog.config.respond_to?(:[])
-      DB2Fog.config[:directory]
+        DB2Fog.config[:directory]
       else
         raise "DB2Fog not configured"
       end
