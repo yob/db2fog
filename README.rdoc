@@ -52,23 +52,25 @@ providers they should work with just a config change to Db2Fog.
     :local_root => Rails.root.to_s + '/db/backups',
     :provider   => 'Local'
   }
- 
+
 == Passing options to the database driver
 
-DB2Fog.config = {
-  :directory  => 'bucket-name',
-  :local_root => Rails.root.to_s + '/db/backups',
-  :provider   => 'Local',
-  :database_options => {
-    :pg_version => 8
+Database adaptors may support further configuration via the :database_options hash.
+
+  DB2Fog.config = {
+    :directory  => 'bucket-name',
+    :local_root => Rails.root.to_s + '/db/backups',
+    :provider   => 'Local',
+    :database_options => {
+      :pg_version => 8
+    }
   }
-}
 
 Supported database options:
 
 pg_version    8 or 9
   The major version of PostgreSQL installed on the server. Defaults to 9.
-  
+
 == Usage
 
   # Add to your crontab or whatever
@@ -82,12 +84,13 @@ pg_version    8 or 9
 
 This is pure so ruby should run on most ruby VMs. I develop on MRI 1.9.2.
 
-This will only work work with rails 3. Supporting earlier versions is more
+This will only work with rails 3. Supporting earlier versions is more
 complication than I feel like handling at the moment.
 
 == Development
 
-Specs are really weak. This code is bit hackish but is being used by quite a few people.
+Specs are a little weak and mysql based. This code is bit hackish but is being
+used by quite a few people.
 
 == Kudos
 
