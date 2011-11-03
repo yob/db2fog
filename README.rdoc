@@ -80,6 +80,14 @@ pg_version    8 or 9
   rake db2fog:backup:restore  # You should be testing this regularly
   rake db2fog:backup:clean    # Clean up old backups - cron this
 
+=== Alternative
+
+If you want to trigger backups from ruby (say, from a delayed job) you can
+do this:
+
+    DB2Fog.new.full_backup
+    DB2Fog.new.clean
+
 == Compatibility
 
 This is pure so ruby should run on most ruby VMs. I develop on MRI 1.9.2.
