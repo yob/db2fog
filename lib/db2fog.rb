@@ -10,7 +10,7 @@ require 'db2fog/railtie'
 class DB2Fog
   cattr_accessor :config
 
-  def full_backup
+  def backup
     file_name = "dump-#{db_credentials[:database]}-#{Time.now.utc.strftime("%Y%m%d%H%M")}.sql.gz"
     store.store(file_name, open(database.dump))
     store.store(most_recent_dump_file_name, file_name)

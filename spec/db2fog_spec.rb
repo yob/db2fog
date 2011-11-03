@@ -24,14 +24,14 @@ describe DB2Fog do
     Dir.entries(storage_dir).select { |f| f[0,1] != "."}.sort
   end
 
-  describe "full_backup()" do
+  describe "backup()" do
     it 'can save a backup' do
       db2fog = DB2Fog.new
       load_schema
       Person.create!(:name => "Baxter")
 
       Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) do
-        db2fog.full_backup
+        db2fog.backup
       end
 
       backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz", "most-recent-dump-db2s3_unittest.txt"]
@@ -43,11 +43,11 @@ describe DB2Fog do
       Person.create!(:name => "Baxter")
 
       Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) do
-        db2fog.full_backup
+        db2fog.backup
       end
 
       Timecop.travel(Time.local(2011, 7, 24, 14, 10, 0)) do
-        db2fog.full_backup
+        db2fog.backup
       end
 
       backup_files.should == ["dump-db2s3_unittest-201107230410.sql.gz","dump-db2s3_unittest-201107240410.sql.gz","most-recent-dump-db2s3_unittest.txt"]
@@ -58,8 +58,8 @@ describe DB2Fog do
       load_schema
       Person.create!(:name => "Baxter")
 
-      Timecop.travel(Time.local(2011, 7, 23, 12, 10, 0)) { db2fog.full_backup }
-      Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.full_backup }
+      Timecop.travel(Time.local(2011, 7, 23, 12, 10, 0)) { db2fog.backup }
+      Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.backup }
 
       latest = File.join(storage_dir, "most-recent-dump-db2s3_unittest.txt")
       File.read(latest).should == "dump-db2s3_unittest-201107230410.sql.gz"
@@ -71,7 +71,7 @@ describe DB2Fog do
       db2fog = DB2Fog.new
       load_schema
       Person.create!(:name => "Baxter")
-      db2fog.full_backup
+      db2fog.backup
       drop_schema
       db2fog.restore
       Person.find_by_name("Baxter").should_not be_nil
@@ -85,17 +85,17 @@ describe DB2Fog do
       Person.create!(:name => "Baxter")
 
       # keep 1 backup per week
-      Timecop.travel(Time.local(2011, 6, 23, 14, 10, 0)) { db2fog.full_backup }
-      Timecop.travel(Time.local(2011, 6, 24, 14, 10, 0)) { db2fog.full_backup }
+      Timecop.travel(Time.local(2011, 6, 23, 14, 10, 0)) { db2fog.backup }
+      Timecop.travel(Time.local(2011, 6, 24, 14, 10, 0)) { db2fog.backup }
 
       # keep 1 backup per day
-      Timecop.travel(Time.local(2011, 7, 20, 14, 10, 0)) { db2fog.full_backup }
-      Timecop.travel(Time.local(2011, 7, 20, 18, 10, 0)) { db2fog.full_backup }
-      Timecop.travel(Time.local(2011, 7, 20, 23, 10, 0)) { db2fog.full_backup }
+      Timecop.travel(Time.local(2011, 7, 20, 14, 10, 0)) { db2fog.backup }
+      Timecop.travel(Time.local(2011, 7, 20, 18, 10, 0)) { db2fog.backup }
+      Timecop.travel(Time.local(2011, 7, 20, 23, 10, 0)) { db2fog.backup }
 
       # keep all backups from past 24 hours
-      Timecop.travel(Time.local(2011, 7, 23, 12, 10, 0)) { db2fog.full_backup }
-      Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.full_backup }
+      Timecop.travel(Time.local(2011, 7, 23, 12, 10, 0)) { db2fog.backup }
+      Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.backup }
 
       # clean up
       Timecop.travel(Time.local(2011, 7, 23, 14, 10, 0)) { db2fog.clean }
