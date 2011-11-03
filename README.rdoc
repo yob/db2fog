@@ -74,18 +74,18 @@ pg_version    8 or 9
 == Usage
 
   # Add to your crontab or whatever
-  rake db2fog:backup:full
+  rake db2fog:full
 
   # Handy tasks
-  rake db2fog:backup:restore  # You should be testing this regularly
-  rake db2fog:backup:clean    # Clean up old backups - cron this
+  rake db2fog:restore  # You should be testing this regularly
+  rake db2fog:clean    # Clean up old backups - cron this
 
 === Alternative
 
 If you want to trigger backups from ruby (say, from a delayed job) you can
 do this:
 
-    DB2Fog.new.full_backup
+    DB2Fog.new.backup
     DB2Fog.new.clean
 
 == Compatibility
