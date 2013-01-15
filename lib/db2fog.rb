@@ -70,6 +70,10 @@ class DB2Fog
       ActiveRecord::Base.connection.instance_eval { @config } # Dodgy!
     elsif Object.const_defined?(:DataMapper)
       DataMapper.repository.adapter.options.inject({}){|m,(k,v)| m[k.to_sym] = v;m }
+    elsif Object.const_defined?(:Sequel)
+      opts = Sequel::DATABASES.first.opts
+      opts[:username] = opts[:user]
+      opts
     end
   end
 
