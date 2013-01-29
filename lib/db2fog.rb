@@ -133,8 +133,8 @@ class DB2Fog
     def dump
       dump_file = Tempfile.new("dump")
 
-      cmd = "pg_dump --clean --format=p #{pg_dump_options}"
-      cmd += " | gzip -9 > #{dump_file.path}"
+      cmd = "pg_dump --clean --format=p --compress=9 #{pg_dump_options}"
+      cmd += " > #{dump_file.path}"
       run(cmd)
 
       dump_file.path
