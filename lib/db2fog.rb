@@ -86,20 +86,30 @@ class DB2Fog
                   end
   end
 
-  class MysqlAdaptor
+  class BaseAdaptor
 
     def initialize(credentials)
       @credentials = credentials
     end
 
+    def run(command)
+      result = system(command)
+      raise("error, process exited with status #{$?.exitstatus}") unless result
+    end
+
     def dump
       dump_file = Tempfile.new("dump")
+      run(dump_command(dump_file))
+      dump_file.path
+    end
 
+  end
+
+  class MysqlAdaptor < BaseAdaptor
+
+    def dump_command(dump_file)
       cmd = "mysqldump --quick --single-transaction --create-options #{mysql_options}"
       cmd += " | gzip -9 > #{dump_file.path}"
-      run(cmd)
-
-      dump_file.path
     end
 
     def restore(path)
@@ -117,27 +127,13 @@ class DB2Fog
       cmd += " #{@credentials[:database]}"
     end
 
-    def run(command)
-      result = system(command)
-      raise("error, process exited with status #{$?.exitstatus}") unless result
-    end
-
   end
 
-  class PsqlAdaptor
+  class PsqlAdaptor < BaseAdaptor
 
-    def initialize(credentials)
-      @credentials = credentials
-    end
-
-    def dump
-      dump_file = Tempfile.new("dump")
-
+    def dump_command(dump_file)
       cmd = "pg_dump --clean --format=p --compress=9 #{pg_dump_options}"
       cmd += " > #{dump_file.path}"
-      run(cmd)
-
-      dump_file.path
     end
 
     def restore(path)
@@ -165,11 +161,6 @@ class DB2Fog
     def pg_version
       opts = database_options || {}
       opts[:pg_version] || 9
-    end
-
-    def run(command)
-      result = system(command)
-      raise("error, process exited with status #{$?.exitstatus}") unless result
     end
 
     def database_options
