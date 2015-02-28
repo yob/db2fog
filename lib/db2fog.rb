@@ -80,7 +80,7 @@ class DB2Fog
   def database
     @database ||= case db_credentials[:adapter]
                   when /mysql/    then MysqlAdaptor.new(db_credentials)
-                  when /postgres/ then PsqlAdaptor.new(db_credentials)
+                  when /postgres/ || /postgis/ then PsqlAdaptor.new(db_credentials)
                   else
                     raise "database adaptor '#{db_credentials[:adapter]}' not supported"
                   end
