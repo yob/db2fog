@@ -74,7 +74,7 @@ pg_version    8 or 9
 == Usage
 
   # Add to your crontab or whatever
-  rake db2fog:full
+  rake db2fog:backup:full
 
   # Handy tasks
   rake db2fog:restore  # You should be testing this regularly
