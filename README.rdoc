@@ -1,3 +1,7 @@
+= NOT SUPPORTED
+
+This gem is not supported anymore. You can find last version of this gem in https://github.com/itbeaver/db2fog
+
 = DB2Fog
 
 A rails plugin to backup Mysql or PostgreSQL to a cloud storage provider. You're looking at
